@@ -1,0 +1,26 @@
+Bruteforce Soln
+class Solution(object):
+    def missingNumber(self, nums):
+        for i in range(len(nums)+ 1):
+            if i not in nums:
+                return i
+
+
+Optimized soln (using sum)
+class Solution(object):
+    def missingNumber(self, nums):
+        n = len(nums)
+        actualsum = n * (n + 1) // 2
+        obtainedsum = sum(nums)
+        return actualsum - obtainedsum
+
+Optimized soln (using xor)
+class Solution(object):
+    def missingNumber(self, nums):
+        actualxor = 0
+        obtainedxor = 0
+        for i in range(len(nums) + 1):
+            actualxor ^= i
+        for num in nums:
+            obtainedxor ^= num
+        return actualxor ^ obtainedxor
