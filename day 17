@@ -1,0 +1,61 @@
+#Knapsack style tabulation
+class Solution(object):
+    def coinChange(self, coins, amount):
+        """
+        :type coins: List[int]
+        :type amount: int
+        :rtype: int
+        """
+        dp = [float('inf')] * (amount + 1)
+        dp[0] = 0  # Base case: 0 coins to make amount 0
+
+        for coin in coins:
+            for a in range(coin, amount + 1):
+                dp[a] = min(dp[a], dp[a - coin] + 1)
+
+        return dp[amount] if dp[amount] != float('inf') else -1
+          
+#Normal style tabulation
+class Solution(object):
+    def coinChange(self, coins, amount):
+        """
+        :type coins: List[int]
+        :type amount: int
+        :rtype: int
+        """
+        # Step 1: Initialize dp array with inf, and base case dp[0] = 0
+        dp = [float('inf')] * (amount + 1)
+        dp[0] = 0  # 0 coins needed to make amount 0
+
+        # Step 2: Build dp table from 1 to amount
+        for a in range(1, amount + 1):
+            for coin in coins:
+                if coin <= a:
+                    dp[a] = min(dp[a], dp[a - coin] + 1)
+
+        # Step 3: If dp[amount] is still inf, return -1 (no solution)
+        return dp[amount] if dp[amount] != float('inf') else -1
+
+#Memoization
+class Solution(object):
+    def coinChange(self, coins, amount):
+        memo = {}
+
+        def dp(remaining):
+            if remaining in memo:
+                return memo[remaining]
+            if remaining == 0:
+                return 0
+            if remaining < 0:
+                return float('inf')
+
+            res = float('inf')
+            for coin in coins:
+                res = min(res, dp(remaining - coin) + 1)
+
+            memo[remaining] = res
+            return res
+
+        ans = dp(amount)
+        return ans if ans != float('inf') else -1
+  
