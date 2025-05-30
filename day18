@@ -1,0 +1,53 @@
+#DP(tabulation)
+class Solution(object):
+    def lengthOfLIS(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        n = len(nums)
+        dp = [1] * n
+        for i in range(n):
+            for j in range(i):
+                if nums[i] > nums[j]:
+                    dp[i] = max(dp[i], dp[j] + 1)
+        return max(dp)
+
+
+#Binary search (Patience sorting)
+import bisect
+
+class Solution(object):
+    def lengthOfLIS(self, nums):
+        tails = []
+        for num in nums:
+            idx = bisect.bisect_left(tails, num)
+            if idx == len(tails):
+                tails.append(num)
+            else:
+                tails[idx] = num
+        return len(tails)
+          
+#Without importing bisect
+class Solution(object):
+    def lengthOfLIS(self, nums):
+        tails = []
+
+        def find_insert_index(tails, target):
+            left, right = 0, len(tails) - 1
+            while left <= right:
+                mid = (left + right) // 2
+                if tails[mid] < target:
+                    left = mid + 1
+                else:
+                    right = mid - 1
+            return left  # first index where target <= tails[mid]
+
+        for num in nums:
+            idx = find_insert_index(tails, num)
+            if idx == len(tails):
+                tails.append(num)
+            else:
+                tails[idx] = num
+
+        return len(tails)
