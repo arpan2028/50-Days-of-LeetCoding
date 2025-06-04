@@ -1,0 +1,94 @@
+#House Robber II
+#Tabulation(0th indexed)
+class Solution(object):
+    def rob(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        def rob_linear(nums):
+            n = len(nums)
+            if n == 0:
+                return 0
+            if n == 1:
+                return nums[0]
+            if n == 2:
+                return max(nums[0], nums[1])
+            dp = [0] * (n)
+            dp[0] = nums[0]
+            dp[1] = max(nums[0], nums[1])
+            for i in range(2, n):
+                dp[i] = max(dp[i - 1], nums[i] + dp[i - 2])
+            return dp[-1]
+        
+        if len(nums) == 1:
+            return nums[0]
+        return max(rob_linear(nums[1:]), rob_linear(nums[:-1]))
+
+#Tabulation(1th indexed)
+class Solution(object):
+    def rob(self, nums):
+        def helper(nums):
+            n = len(nums)
+            if n == 0:
+                return 0
+            if n == 1:
+                return nums[0]
+            dp = [0] * (n + 1)
+            dp[1] = nums[0]
+            for i in range(2, n + 1):
+                dp[i] = max(dp[i - 1], nums[i - 1] + dp[i - 2])
+            return dp[n]
+
+        if len(nums) == 1:
+            return nums[0]
+        return max(helper(nums[1:]), helper(nums[:-1]))
+
+# Fibonacci style with o(1) sc
+class Solution(object):
+    def rob(self, nums):
+        def helper(nums):
+            n = len(nums)
+            if n == 0:
+                return 0
+            if n == 1:
+                return nums[0]
+            a, b = nums[0], max(nums[0], nums[1])
+            for i in range(2, n):
+                c = max(b, nums[i] + a)
+                a = b
+                b = c
+            return b
+
+        if len(nums) == 1:
+            return nums[0]
+        return max(helper(nums[1:]), helper(nums[:-1]))
+
+#Memoization solution
+class Solution(object):
+    def rob(self, nums):
+        if len(nums) == 1:
+            return nums[0]
+
+        def rob_range(start, end):
+            cache = {}
+
+            def dp(i):
+                if i > end:
+                    return 0
+                if i in cache:
+                    return cache[i]
+                result = max(dp(i + 1), nums[i] + dp(i + 2))
+                cache[i] = result
+                return result
+
+            return dp(start)
+
+        return max(rob_range(0, len(nums) - 2), rob_range(1, len(nums) - 1))
+
+
+
+
+        
+
+
