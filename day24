@@ -1,0 +1,66 @@
+#Decode ways - LC 91
+#Tabulation
+class Solution:
+    def numDecodings(self, s):
+        n = len(s)
+        if not s or s[0] == '0':
+            return 0
+
+        dp = [0] * (n + 1)
+        dp[0] = 1  # base case
+
+        for i in range(1, n + 1):
+            if s[i - 1] != '0':
+                dp[i] += dp[i - 1]
+            if i >= 2 and 10 <= int(s[i - 2:i]) <= 26:
+                dp[i] += dp[i - 2]
+
+        return dp[n]
+
+#Memoization
+class Solution:
+    def numDecodings(self, s):
+        n = len(s)
+        memo = {}
+
+        def dfs(i):
+            if i in memo:
+                return memo[i]
+            if i == n:
+                return 1  # Reached the end, valid path
+            if s[i] == '0':
+                return 0  # Can't decode '0' on its own
+
+            # Option 1: take one digit
+            res = dfs(i + 1)
+
+            # Option 2: take two digits (if valid)
+            if i + 1 < n and 10 <= int(s[i:i+2]) <= 26:
+                res += dfs(i + 2)
+
+            memo[i] = res
+            return res
+
+        return dfs(0)
+              
+#Optimized tabulation with o(1) Space complexity
+class Solution:
+    def numDecodings(self, s):
+        n = len(s)
+        if not s or s[0] == '0':
+            return 0
+
+        a, b = 1, 1  # a = dp[i-1], b = dp[i-2]
+
+        for i in range(1, n):
+            c = 0
+            if s[i] != '0':
+                c += a  # 1-digit decode valid
+            if 10 <= int(s[i - 1:i + 1]) <= 26:
+                c += b  # 2-digit decode valid
+
+            # Shift forward like Fibonacci
+            b = a
+            a = c
+
+        return a
