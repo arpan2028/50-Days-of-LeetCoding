@@ -1,0 +1,65 @@
+#CourseSchedule
+#dfs
+class Solution:
+    def canFinish(self, numCourses, prerequisites):
+        # Step 1: Build adjacency list
+        preMap = {i: [] for i in range(numCourses)}
+        for crs, pre in prerequisites:
+            preMap[crs].append(pre)
+
+        # visitSet = courses currently in the DFS path (for cycle detection)
+        visitSet = set()
+
+        def dfs(crs):
+            if crs in visitSet:
+                return False  # cycle detected
+
+            if preMap[crs] == []:
+                return True  # no prereqs or already processed
+
+            visitSet.add(crs)
+
+            for pre in preMap[crs]:
+                if not dfs(pre):
+                    return False
+
+            visitSet.remove(crs)
+            preMap[crs] = []  # memoize: no more prereqs needed
+            return True
+
+        # Try to take each course
+        for crs in range(numCourses):
+            if not dfs(crs):
+                return False
+
+        return True
+
+#bfs Kahn's Algot(Yet to study)
+from collections import defaultdict, deque
+
+class Solution:
+    def canFinish(self, numCourses, prerequisites):
+        # Step 1: Build graph and in-degree array
+        graph = defaultdict(list)
+        in_degree = [0] * numCourses
+
+        for cur, pre in prerequisites:
+            graph[pre].append(cur)
+            in_degree[cur] += 1
+
+        # Step 2: Queue all courses with no prereqs
+        queue = deque([i for i in range(numCourses) if in_degree[i] == 0])
+        completed = 0
+
+        # Step 3: Process the graph (topo sort)
+        while queue:
+            pre = queue.popleft()
+            completed += 1
+
+            for cur in graph[pre]:
+                in_degree[cur] -= 1
+                if in_degree[cur] == 0:
+                    queue.append(cur)
+
+        # Step 4: Check if all courses were completed
+        return completed == numCourses
