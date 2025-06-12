@@ -1,0 +1,62 @@
+#Number of Islands
+#dfs way
+class Solution:
+    def numIslands(self, grid):
+        if not grid:
+            return 0
+
+        rows, cols = len(grid), len(grid[0])
+        island_count = 0
+
+        def dfs(r, c):
+            # Base case: out of bounds or not land
+            if r < 0 or r >= rows or c < 0 or c >= cols or grid[r][c] != '1':
+                return
+
+            # Mark current cell as visited
+            grid[r][c] = '0'
+
+            # Visit all 4 directions
+            dfs(r + 1, c)  # down
+            dfs(r - 1, c)  # up
+            dfs(r, c + 1)  # right
+            dfs(r, c - 1)  # left
+
+        for r in range(rows):
+            for c in range(cols):
+                if grid[r][c] == '1':
+                    dfs(r, c)
+                    island_count += 1
+
+        return island_count
+              
+#bfs way
+from collections import deque
+
+class Solution:
+    def numIslands(self, grid):
+        if not grid:
+            return 0
+
+        rows, cols = len(grid), len(grid[0])
+        island_count = 0
+
+        def bfs(r, c):
+            q = deque([(r, c)])
+            grid[r][c] = '0'  # mark as visited
+
+            while q:
+                row, col = q.popleft()
+                for dr, dc in [(0, 1), (1, 0), (-1, 0), (0, -1)]:
+                    nr, nc = row + dr, col + dc
+                    if 0 <= nr < rows and 0 <= nc < cols and grid[nr][nc] == '1':
+                        grid[nr][nc] = '0'  # mark as visited
+                        q.append((nr, nc))
+
+        for r in range(rows):
+            for c in range(cols):
+                if grid[r][c] == '1':
+                    bfs(r, c)
+                    island_count += 1
+
+        return island_count
