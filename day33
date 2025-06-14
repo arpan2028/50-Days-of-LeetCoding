@@ -1,0 +1,44 @@
+#Merge Intervals
+# Optimal way
+class Solution:
+    def merge(self, intervals):
+        if not intervals:
+            return []
+
+        intervals.sort(key=lambda i: i[0])
+        output = [intervals[0]]
+
+        for start, end in intervals[1:]:
+            lastEnd = output[-1][1]
+            if start <= lastEnd:
+                output[-1][1] = max(lastEnd, end)
+            else:
+                output.append([start, end])
+
+        return output
+              
+#Sweep line
+class Solution:
+    def merge(self, intervals):
+        events = []
+        for start, end in intervals:
+            events.append((start, 'start'))
+            events.append((end, 'end'))
+
+        # Sort start before end if time is same
+        events.sort(key=lambda x: (x[0], 0 if x[1] == 'start' else 1))
+
+        merged = []
+        active = 0
+        for time, typ in events:
+            if typ == 'start':
+                if active == 0:
+                    start_time = time
+                active += 1
+            else:
+                active -= 1
+                if active == 0:
+                    merged.append([start_time, time])
+
+        return merged
+              
