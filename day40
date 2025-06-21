@@ -1,0 +1,49 @@
+#Normal Linked list way
+class Solution(object):
+    def reorderList(self, head):
+        """
+        :type head: Optional[ListNode]
+        :rtype: None Do not return anything, modify head in-place instead.
+        """
+        #Null return None
+        #If one LL return as it is
+        #Find the middle of the list,
+        #reverse it
+        #append it to start followed by other half
+        if not head and not head.next:
+            return None
+        slow, fast = head, head
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+        def reverse(head):
+            prev = None
+            while head:
+                next_node = head.next
+                head.next = prev
+                prev = head
+                head = next_node
+            return prev
+        second = reverse(slow.next)
+        slow.next = None
+        first = head
+        while second:
+            tmp1 = first.next
+            tmp2 = second.next
+            first.next = second
+            second.next = tmp1
+            first = tmp1
+            second = tmp2
+
+#Stack Method(Might see  that later on )
+        
+
+
+
+        
+
+        
+
+
+
+
