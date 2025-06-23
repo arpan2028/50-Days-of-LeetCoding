@@ -1,0 +1,60 @@
+#Set Matrix Zeroes
+1. Brute force solution
+class Solution(object):
+    def setZeroes(self, matrix):
+        """
+        :type matrix: List[List[int]]
+        :rtype: None Do not return anything, modify matrix in-place instead.
+        """
+        rows = len(matrix)
+        cols = len(matrix[0])
+        zero_rows = set()
+        zero_cols = set()
+
+        for i in range(rows):
+            for j in range(cols):
+                if matrix[i][j] == 0:
+                    zero_rows.add(i)
+                    zero_cols.add(j)
+
+        for i in zero_rows:
+            for j in range(cols):
+                matrix[i][j] = 0    
+
+        for j in zero_cols:
+            for i in range(rows):
+                matrix[i][j] = 0 
+
+2. Optimized O(1) solution
+class Solution:
+    def setZeroes(self, matrix):
+        ROWS, COLS = len(matrix), len(matrix[0])
+        rowZero = False
+
+        # Step 1: Mark rows and columns that need to be zeroed using first row & column
+        for r in range(ROWS):
+            for c in range(COLS):
+                if matrix[r][c] == 0:
+                    matrix[0][c] = 0
+                    if r > 0:
+                        matrix[r][0] = 0
+                    else:
+                        rowZero = True
+
+        # Step 2: Zero out cells based on markers in first row & column
+        for r in range(1, ROWS):
+            for c in range(1, COLS):
+                if matrix[0][c] == 0 or matrix[r][0] == 0:
+                    matrix[r][c] = 0
+
+        # Step 3: Zero out first column if needed
+        if matrix[0][0] == 0:
+            for r in range(ROWS):
+                matrix[r][0] = 0
+
+        # Step 4: Zero out first row if needed
+        if rowZero:
+            for c in range(COLS):
+                matrix[0][c] = 0
+
+  
