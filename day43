@@ -1,0 +1,47 @@
+#Rotate Image
+
+#1. Layer by layer 4 way swap
+class Solution:
+    def rotate(self, matrix):
+        n = len(matrix)
+        l, r = 0, n - 1
+
+        while l < r:
+            for i in range(r - l):
+                top, bottom = l, r
+
+                # Save the top-left
+                topLeft = matrix[top][l + i]
+
+                # Move bottom-left → top-left
+                matrix[top][l + i] = matrix[bottom - i][l]
+
+                # Move bottom-right → bottom-left
+                matrix[bottom - i][l] = matrix[bottom][r - i]
+
+                # Move top-right → bottom-right
+                matrix[bottom][r - i] = matrix[top + i][r]
+
+                # Move saved top-left → top-right
+                matrix[top + i][r] = topLeft
+
+            l += 1
+            r -= 1
+                  
+#2. Concise (Transpose + Reverse) python based method 
+
+class Solution(object):
+    def rotate(self, matrix):
+        """
+        :type matrix: List[List[int]]
+        :rtype: None Do not return anything, modify matrix in-place instead.
+        """
+        n = len(matrix)
+        for i in range(n):
+            for j in range(i + 1, n):
+                matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
+
+        for row in matrix:
+            row.reverse()
+          
+
