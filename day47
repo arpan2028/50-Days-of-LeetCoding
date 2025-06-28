@@ -1,0 +1,46 @@
+#Minimum Window Substring
+class Solution(object):
+    def minWindow(self, s, t):
+        """
+        :type s: str
+        :type t: str
+        :rtype: str
+        """
+
+        # Build freqc dictionary for required character counts
+        freqc = {}
+        for c in t:
+            freqc[c] = freqc.get(c, 0) + 1
+
+        window = {}
+        required = len(freqc)  # number of unique chars we need to match
+        formed = 0             # number of unique chars matched with required freq
+
+        left = 0
+        min_len = float('inf')
+        res = ""
+
+        for right in range(len(s)):
+            c = s[right]
+            window[c] = window.get(c, 0) + 1
+
+            # If current char meets required freq, increment formed
+            if c in freqc and window[c] == freqc[c]:
+                formed += 1
+
+            # Try to shrink the window while it is valid
+            while formed == required:
+                # Update result if this window is smaller
+                if right - left + 1 < min_len:
+                    min_len = right - left + 1
+                    res = s[left:right+1]
+
+                # Shrink from the left
+                char_left = s[left]
+                window[char_left] -= 1
+                if char_left in freqc and window[char_left] < freqc[char_left]:
+                    formed -= 1
+
+                left += 1
+
+        return res
