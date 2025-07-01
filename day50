@@ -1,0 +1,43 @@
+#The old good Valid parenthesis
+
+#Stack method
+class Solution(object):
+    def isValid(self, s):
+        """
+        :type s: str
+        :rtype: bool
+        """
+        mapping = {
+            '}' : '{',
+            ')' : '(',
+            ']' : '[' 
+        }
+        stack = []
+
+        for char in s:
+            if char in mapping:
+                if stack and stack[-1] == mapping[char]:
+                    stack.pop()
+                else:
+                    return False
+            else:
+                stack.append(char)
+        return not stack
+
+#Pushing Expected Closing Brackets method(this is cool)
+class Solution:
+    def isValid(self, s):
+        stack = []
+
+        for char in s:
+            if char == '(':
+                stack.append(')')
+            elif char == '{':
+                stack.append('}')
+            elif char == '[':
+                stack.append(']')
+            else:
+                if not stack or stack.pop() != char:
+                    return False
+
+        return not stack
