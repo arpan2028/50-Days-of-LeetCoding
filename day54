@@ -1,0 +1,19 @@
+#Maximum Depth of Binary Tree
+#Recursive DFS
+class Solution(object):
+    def maxDepth(self, root):
+        """
+        :type root: Optional[TreeNode]
+        :rtype: int
+        """
+        while not root:
+            return 0
+        left = self.maxDepth(root.left)
+        right = self.maxDepth(root.right)
+        return 1 + max(left, right)
+
+
+There are two more solutions
+1. Iterative BFS (Queue)
+2. Iterative DFS (Stack)
+I might see them later on.
