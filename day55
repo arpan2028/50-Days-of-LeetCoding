@@ -1,0 +1,32 @@
+#Same Tree
+class Solution:
+    def isSameTree(self, p, q):
+        if not p and not q:
+            return True
+        if not p or not q:
+            return False
+        if p.val != q.val:
+            return False
+        return self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right)
+
+
+
+
+
+"""
+UMPIRE Method
+Understand - Same is they are structurally identical and have same value
+    Edge Cases - 0 element, 1 element
+
+Match - dfs
+Planning -  Recursive dfs
+Implement - Recursive dfs
+Reviewing - Code looks good
+Evaluate - on and oh
+
+"""
+
+There are two more ways to solve this
+      1. Iterative BFS using stack
+      2. BFS using Queue
+I might see them later on.
