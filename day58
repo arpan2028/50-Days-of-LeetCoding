@@ -1,0 +1,46 @@
+#Path Sum II
+# Definition for a binary tree node.
+class TreeNode(object):
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+class Solution(object):
+    def pathSum(self, root, targetSum):
+        """
+        :type root: Optional[TreeNode]
+        :type targetSum: int
+        :rtype: List[List[int]]
+        """
+
+        groupofres = []
+        def dfs(node, curSum, res):
+            if not node:
+                return
+            curSum += node.val
+            res.append(node.val)
+            print(res)
+            print(curSum)
+
+            if not node.left and not node.right:
+                if curSum == targetSum:
+                    groupofres.append(list(res))
+
+
+            dfs(node.left, curSum, res)
+            dfs(node.right, curSum, res)
+            res.pop()
+
+        dfs(root, 0, [])
+        return groupofres
+        
+ #UMPIRE
+ #Understood the problem: the node value can be negative tooo
+ #Matching: dfs recursive preorder
+ #Planning: I started with the code for Path Sum I and made changes to be useful for this problem
+ #Implement: Implemented
+ #Reviewed for errors and test cases
+ #Evalutate:
+ #TC - O(n) - n is the number of nodes
+ #SC - O(h), o(N) worst case - h is the height of tree
