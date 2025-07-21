@@ -1,0 +1,52 @@
+#Word search II
+
+class TrieNode:
+    def __init__(self):
+        self.children = {}
+        self.word = None  # Stores full word at the end node
+
+
+class Solution:
+    def findWords(self, board, words):
+        # Step 1: Build Trie
+        root = TrieNode()
+        for w in words:
+            node = root
+            for c in w:
+                if c not in node.children:
+                    node.children[c] = TrieNode()
+                node = node.children[c]
+            node.word = w  # Mark the end of a word
+
+        rows, cols = len(board), len(board[0])
+        res = []
+        visit = set()
+
+        # Step 2: DFS Helper
+        def dfs(r, c, node):
+            if (
+                r < 0 or r >= rows or
+                c < 0 or c >= cols or
+                (r, c) in visit or
+                board[r][c] not in node.children
+            ):
+                return
+
+            visit.add((r, c))
+            node = node.children[board[r][c]]
+
+            if node.word:
+                res.append(node.word)
+                node.word = None  # Avoid duplicate results
+
+            for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                dfs(r + dr, c + dc, node)
+
+            visit.remove((r, c))
+
+        # Step 3: Start DFS from each cell
+        for r in range(rows):
+            for c in range(cols):
+                dfs(r, c, root)
+
+        return res
